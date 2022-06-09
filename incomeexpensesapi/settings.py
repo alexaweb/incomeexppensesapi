@@ -118,19 +118,19 @@ CORS_ORIGIN_REGEX_WHITELIST = [
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'cobsdevelopment', # database name
-        'USER': 'cobs',
-        'PASSWORD': 'cobs.pwd',
-        'HOST': 'localhost',
-        'PORT': '3306',
-    }
-}
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.mysql',
+#        'NAME': 'cobsdevelopment', # database name
+#        'USER': 'cobs',
+#        'PASSWORD': 'cobs.pwd',
+#        'HOST': 'localhost',
+#        'PORT': '3306',
+#    }
+#}
 
 if env('DATABASE_URL'):
-    DATABASES['default'] = dj_database_url.config(default=os.environ['DATABASE_URL'])
+    DATABASES = {'default': dj_database_url.config(default=env('DATABASE_URL'))}
 
 #mysql://USER:PASSWORD@HOST:PORT/NAME
 #DATABASES = {'default': dj_database_url.config(default='postgres://localhost')}
