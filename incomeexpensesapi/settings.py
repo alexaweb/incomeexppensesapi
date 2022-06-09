@@ -121,7 +121,7 @@ CORS_ORIGIN_REGEX_WHITELIST = [
 #DATABASES = {
 #    'default': {
 #        'ENGINE': 'django.db.backends.mysql',
-#        'NAME': 'cobsdevelopment', # database name
+#        'NAME': env('cobsdevelopment', # database name
 #        'USER': 'cobs',
 #        'PASSWORD': 'cobs.pwd',
 #        'HOST': 'localhost',
