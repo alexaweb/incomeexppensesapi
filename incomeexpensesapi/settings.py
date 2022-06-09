@@ -12,21 +12,35 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 import datetime
+import dj_database_url
+import environ
 
+
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# Initialise environment variables
+# Take environment variables from .env file
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '@6p-h7#oy4unyb4+(@i&3eq(knbkvjkeyv&@*8+a%f45b@mfm1'
+# Raises Django's ImproperlyConfigured
+# exception if SECRET_KEY not in os.environ
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# False if not in os.environ because of casting above
+DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = ['198.211.99.20', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = env("ALLOWED_HOSTS").split(' ')
+
 
 AUTH_USER_MODEL = 'authentication.User'
 # Application definition
@@ -59,6 +73,7 @@ SWAGGER_SETTINGS = {
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -105,10 +120,20 @@ CORS_ORIGIN_REGEX_WHITELIST = [
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'cobsdevelopment', # database name
+        'USER': 'cobs',
+        'PASSWORD': 'cobs.pwd',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
+
+if env('DATABASE_URL'):
+    DATABASES['default'] = dj_database_url.config(default=os.environ['DATABASE_URL'])
+
+#mysql://USER:PASSWORD@HOST:PORT/NAME
+#DATABASES = {'default': dj_database_url.config(default='postgres://localhost')}
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
