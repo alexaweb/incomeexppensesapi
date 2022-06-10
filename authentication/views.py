@@ -50,6 +50,9 @@ class RegisterView(generics.GenericAPIView):
                 'email_subject': 'Verify your email'}
 
         Util.send_email(data)
+
+        #{'token': str(token)} - used to show on screen the actual activation token
+        #user_data - used to return email and password
         return Response(user_data, status=status.HTTP_201_CREATED)
 
 
@@ -137,7 +140,7 @@ class PasswordTokenCheckAPI(generics.GenericAPIView):
             try:
                 if not PasswordResetTokenGenerator().check_token(user):
                     return CustomRedirect(redirect_url+'?token_valid=False')
-                    
+
             except UnboundLocalError as e:
                 return Response({'error': 'Token is not valid, please request a new one'}, status=status.HTTP_400_BAD_REQUEST)
 

@@ -37,7 +37,8 @@ SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # False if not in os.environ because of casting above
-DEBUG = env('DEBUG')
+DEBUG = True
+#env('DEBUG')
 
 ALLOWED_HOSTS = env("ALLOWED_HOSTS").split(' ')
 
@@ -58,7 +59,8 @@ INSTALLED_APPS = [
     'drf_yasg',
     'authentication',
     'expenses',
-    'income'
+    'income',
+    'anymail'
 ]
 
 SWAGGER_SETTINGS = {
@@ -189,8 +191,15 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles')
 
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+#EMAIL_USE_TLS = True
+#EMAIL_HOST = 'smtp.mailgun.org'
+#EMAIL_PORT = 587
+#EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+#EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+
+
+ANYMAIL_MAILGUN_API_KEY = env('MAILGUN_API_KEY')
+ANYMAIL_MAILGUN_SENDER_DOMAIN = env('MAILGUN_DOMAIN')
+EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"  # or sendgrid.EmailBackend, or...
+DEFAULT_FROM_EMAIL = env('EMAIL_FROM')  # if you don't already have this in settings
+SERVER_EMAIL = env('EMAIL_FROM')  # ditto (default from-email for Django errors)

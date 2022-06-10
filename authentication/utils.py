@@ -2,6 +2,7 @@ from django.core.mail import EmailMessage
 
 
 import threading
+from threading import Thread
 
 
 class EmailThread(threading.Thread):
